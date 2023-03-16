@@ -1,9 +1,9 @@
 package entelect.training.incubator.controller;
 
 import entelect.training.incubator.model.Booking;
+import entelect.training.incubator.model.BookingCustomerSearchRequest;
 import entelect.training.incubator.service.BookingService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +30,18 @@ public class BookingController {
         if (!bookings.isEmpty()) {
             return new ResponseEntity<>(bookings, HttpStatus.OK);
         }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchBooking(@RequestBody BookingCustomerSearchRequest searchRequest) {
+
+        Booking booking = bookingService.searchBookings(searchRequest);
+
+        if (booking != null) {
+            return ResponseEntity.ok(booking);
+        }
+
         return ResponseEntity.notFound().build();
     }
 }
